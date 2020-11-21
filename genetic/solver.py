@@ -1,5 +1,6 @@
+import heapq
 import random
-from typing import List, Tuple
+from typing import List, Tuple, Set
 
 from genetic.state import State
 from genetic.utils import pairwise
@@ -15,7 +16,7 @@ class GeneticSolver:
         Representa uma solução (não necessariamente válida) para o Problema das Oito Rainhas.
         """
 
-        def __init__(self, states: List[State], has_found: bool):
+        def __init__(self, states: Set[State], has_found: bool):
             """
             Constrói uma solução.
 
@@ -110,10 +111,10 @@ class GeneticSolver:
         while not solution_states:
             self.current_generation += 1
             if self.current_generation == self._generation_size:
-                return self.Solution(states, has_found=False)
+                return self.Solution(set(states), has_found=False)
 
             # Seleção
-            selected_states: List[State] = self._select_states(states, strategy='roulette')
+            selected_states: List[State] = self._select_states(states, strategy='tournament')
 
             # Crossover
             parent_states: List[Tuple[State, State]] = pairwise(selected_states)
@@ -136,12 +137,12 @@ class GeneticSolver:
                     # Ocorre mutação no indivíduo
                     state.mutate(strategy='bitflip')
 
-            # Junta os filhos gerados com os pais e seleciona apenas os melhores estados
+            # Junta os filhos gerados com os pais
             children_states.extend(states)
-            # TODO complexidade O(n * log(n))
-            states = sorted(children_states, key=lambda s: s.fitness, reverse=True)
-            states = states[:self._population_size]
+
+            # Utiliza um heap máximo para selecionar apenas os melhores estados
+            states = heapq.nlargest(self._population_size, children_states, key=lambda s: s.fitness)
 
             solution_states = [state for state in states if state.fitness == 28]
 
-        return self.Solution(solution_states, has_found=True)
+        return self.Solution(set(solution_states), has_found=True)
