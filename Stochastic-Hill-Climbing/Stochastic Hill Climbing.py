@@ -1,22 +1,21 @@
 from random import randint
-import timeit
 
 class chess():
     def __init__(self):
-        self.tabuleiro = []
-        self.analisado = []
+        self.board = []
+        self.analyzed = []
         self.h = 0
         for i in range(0,8):
-            linha = randint(0,7)
-            tupla = (linha,i)
-            self.tabuleiro += [tupla]
+            row = randint(0,7)
+            tupla = (row,i)
+            self.board += [tupla]
         
         
-    def inicializa(self):
-        self.h = chess.atualizaH(self.h, self.tabuleiro)
-        self.analisado = []
+    def initialize(self):
+        self.h = chess.refresh(self.h, self.board)
+        self.analyzed = []
     
-    def analisa(self):
+    def analyze(self):
         for i in range(1000):
             h = 0
             queen = chess.chooseQueen()
@@ -24,69 +23,69 @@ class chess():
             while rand == queen[0]: rand = randint(0,7)  
             new_queen = (rand,queen[1])
 
-            new_tabuleiro = self.tabuleiro.copy()
-            pos_queen = self.tabuleiro.index(queen)
-            new_tabuleiro[pos_queen] = new_queen
+            new_board = self.board.copy()
+            pos_queen = self.board.index(queen)
+            new_board[pos_queen] = new_queen
             
-            h = chess.atualizaH(h,new_tabuleiro)
+            h = chess.refresh(h,new_board)
 
             if self.h > h:
                 self.h = h
-                self.tabuleiro[pos_queen] = new_queen
+                self.board[pos_queen] = new_queen
             
             if self.h == 0:
                 print(f'O número de iterações foi: {i}')
                 return h
         return h
              
-    def atualizaH(self, he, tabuleiro):
-        for queen in tabuleiro:
-            self.analisado += [queen]
-            he = chess.checkHorizontal(tabuleiro,queen, he)
-            he = chess.checkD1(tabuleiro,queen, he)
-        self.analisado = []
+    def refresh(self, he, board):
+        for queen in board:
+            self.analyzed += [queen]
+            he = chess.checkHorizontal(board,queen, he)
+            he = chess.checkDiagonal(board,queen, he)
+        self.analyzed = []
         return he
 
     def chooseQueen(self):
         rand = randint(0,7)
-        queen = self.tabuleiro[rand]
-        self.analisado += [queen]
+        queen = self.board[rand]
+        self.analyzed += [queen]
         return queen
 
-    def checkHorizontal(self,tabuleiro, queen, h):
-        for i in tabuleiro: 
+    def checkHorizontal(self,board, queen, h):
+        for i in board: 
             if i != queen:
-                if i not in self.analisado:
+                if i not in self.analyzed:
                     if i[0] == queen[0]: h += 1
         return h
 
-    def checkD1(self,tabuleiro, queen, h):
-        linha1 = queen[0];linha2 = queen[0];coluna = queen[1]
-        while coluna >= 0:
-            coluna -= 1
-            linha1 -= 1
-            linha2 += 1
-            if (linha1,coluna) not in self.analisado:
-                if (linha1,coluna) in tabuleiro: h += 1
-            if (linha2,coluna) not in self.analisado:
-                if (linha2,coluna) in tabuleiro: h += 1
-        linha1 = queen[0];linha2 = queen[0];coluna = queen[1]
-        while coluna <= 7:
-            coluna += 1
-            linha1 -= 1
-            linha2 += 1
-            if (linha1,coluna) not in self.analisado:
-                if (linha1,coluna) in tabuleiro: h += 1
-            if (linha2,coluna) not in self.analisado:
-                if (linha2,coluna) in tabuleiro: h += 1
+    def checkDiagonal(self,board, queen, h):
+        row1 = queen[0];row2 = queen[0];column = queen[1]
+        while column >= 0:
+            column -= 1
+            row1 -= 1
+            row2 += 1
+            if (row1,column) not in self.analyzed:
+                if (row1,column) in board: h += 1
+            if (row2,column) not in self.analyzed:
+                if (row2,column) in board: h += 1
+        row1 = queen[0];row2 = queen[0];column = queen[1]
+        while column <= 7:
+            column += 1
+            row1 -= 1
+            row2 += 1
+            if (row1,column) not in self.analyzed:
+                if (row1,column) in board: h += 1
+            if (row2,column) not in self.analyzed:
+                if (row2,column) in board: h += 1
         return h
 
-    def imprime(self):
-        for i in self.tabuleiro:
+    def printing(self):
+        for i in self.board:
             print(i)
 
 chess = chess()
-chess.inicializa()
-h = chess.analisa()
+chess.initialize()
+h = chess.analyze()
 print(f'h é {h}')
-chess.imprime()
+chess.printing()
