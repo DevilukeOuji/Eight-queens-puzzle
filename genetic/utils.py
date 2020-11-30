@@ -19,6 +19,7 @@ class BitArray:
     def __init__(self, group_size: int, /):
         """
         Constrói um vetor binário.
+
         :param group_size: o número de bits que serão agrupados em cada índice do vetor.
         """
         self._array = 0
@@ -51,7 +52,7 @@ class BitArray:
 
         :param index: o índice do vetor a ser inserido.
         :param value: o valor a ser inserido. Caso o número de bits desse valor seja maior que o número de bits de
-        agrupamento `n`, serão inseridos apenas os `n` bits mais significantes desse número.
+            agrupamento `n`, serão inseridos apenas os `n` bits mais significantes desse número.
         """
         value &= self._mask
         del self[index]
@@ -93,6 +94,7 @@ class BitArray:
     def iterate(self, length: int) -> Generator[int, None, None]:
         """
         Itera sobre os grupos de bits mais significantes desse vetor.
+
         :param length: o número de grupos de bits a serem iterados.
         :return: um gerador com os grupos de bits desse vetor.
         """
@@ -101,6 +103,7 @@ class BitArray:
     def iterate_from(self, start: int, stop: int, step: int = 1) -> Generator[int, None, None]:
         """
         Itera sobre um intervalo de elementos desse vetor.
+
         :param start: o índice do vetor cuja iteração começará.
         :param stop: o índice do vetor cuja iteração terminará.
         :param step: o passo da iteração.

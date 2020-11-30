@@ -22,12 +22,12 @@ def main():
             start_time = time.time()
             result = solver.solve()
             end_time = time.time()
-            time_repr = f'{int((end_time - start_time) * 1000)}'
+            milliseconds = int((end_time - start_time) * 1000)
 
             best = result.best()
             print(f'{best}', end=';', file=f)
             print(f'{best.fitness}', end=';', file=f)
-            print(time_repr, end=';', file=f)
+            print(f'{milliseconds}', end=';', file=f)
             print(f'{solver.current_generation}', file=f)
 
 
