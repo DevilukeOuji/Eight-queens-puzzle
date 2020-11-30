@@ -73,7 +73,7 @@ class GeneticSolver:
         raise ValueError("estratégia de seleção inválida")
 
     @staticmethod
-    def _roulette_selection(states: List[State]):
+    def _roulette_selection(states: List[State]) -> List[State]:
         """
         Seleciona estados por meio da estratégia roleta.
 
@@ -85,7 +85,7 @@ class GeneticSolver:
         return random.choices(states, weights=[state.fitness for state in states], k=len(states))
 
     @staticmethod
-    def _tournament_selection(states: List[State]):
+    def _tournament_selection(states: List[State]) -> List[State]:
         """
         Seleciona estados por meio da estratégia torneio.
 
